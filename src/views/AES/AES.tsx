@@ -261,7 +261,7 @@ const AES: React.FC = () => {
                     <textarea className={styles.textArea} value={encryptedText} readOnly />
                 </div>
                 <div className={styles.resultBox}>
-                    <label>Odszyfrowany tekst:</label>
+                    <label>Odszyfrowany tekst / plik:</label>
                     <textarea className={styles.textArea} value={decryptedText} readOnly />
                 </div>
             </div>

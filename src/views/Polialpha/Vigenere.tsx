@@ -1,4 +1,3 @@
-// src/components/VigenereCipher.tsx
 import React, { useState } from 'react';
 import styles from './Vigenere.module.css';
 
@@ -8,41 +7,57 @@ const Vigenere: React.FC = () => {
   const [encryptedText, setEncryptedText] = useState('');
   const [decryptedText, setDecryptedText] = useState('');
 
-  const encryptVigenere = (text: string, key: string): string => {
-    const upperText = text.toUpperCase(); 
-    const upperKey = key.toUpperCase(); 
-    let encrypted = ''; 
-
-    for (let i = 0, j = 0; i < upperText.length; i++) {
-      const charCode = upperText.charCodeAt(i);
-      if (charCode >= 65 && charCode <= 90) { 
-        const shift = upperKey.charCodeAt(j % upperKey.length) - 65; 
-        encrypted += String.fromCharCode(((charCode - 65 + shift) % 26) + 65); 
-        j++; 
-      } else {
-        encrypted += upperText[i];
-      }
+  const validateKey = (key: string): void => {
+    if (!/^[a-zA-Z]+$/.test(key)) {
+      alert("Klucz może zawierać tylko litery alfabetu (A-Z, a-z).");
     }
-
-    return encrypted;
   };
 
-  const decryptVigenere = (text: string, key: string): string => {
-    const upperText = text.toUpperCase();
-    const upperKey = key.toUpperCase(); 
-    let decrypted = ''; 
+  const encryptVigenere = (text: string, key: string): string => {
+  validateKey(key);
+  const cleanedKey = key.toUpperCase();
+  let encrypted = "";
+  let keyIndex = 0;
 
-    for (let i = 0, j = 0; i < upperText.length; i++) {
-      const charCode = upperText.charCodeAt(i); 
-      if (charCode >= 65 && charCode <= 90) { 
-        const shift = upperKey.charCodeAt(j % upperKey.length) - 65; 
-        decrypted += String.fromCharCode(((charCode - 65 - shift + 26) % 26) + 65); 
-        j++;
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const charCode = char.toUpperCase().charCodeAt(0);
+
+    if (charCode >= 65 && charCode <= 90) {
+      const shift = cleanedKey.charCodeAt(keyIndex % cleanedKey.length) - 65;
+      const newChar = String.fromCharCode(((charCode - 65 + shift) % 26) + 65);
+
+      encrypted += char === char.toUpperCase() ? newChar : newChar.toLowerCase();
+      keyIndex++;
+    } else {
+      encrypted += char;
+    }
+  }
+
+  return encrypted;
+  };
+  
+  const decryptVigenere = (text: string, key: string): string => {
+    validateKey(key);
+    const cleanedKey = key.toUpperCase();
+    let decrypted = "";
+    let keyIndex = 0;
+  
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      const charCode = char.toUpperCase().charCodeAt(0);
+  
+      if (charCode >= 65 && charCode <= 90) {
+        const shift = cleanedKey.charCodeAt(keyIndex % cleanedKey.length) - 65;
+        const newChar = String.fromCharCode(((charCode - 65 - shift + 26) % 26) + 65);
+  
+        decrypted += char === char.toUpperCase() ? newChar : newChar.toLowerCase();
+        keyIndex++;
       } else {
-        decrypted += upperText[i];
+        decrypted += char;
       }
     }
-
+  
     return decrypted;
   };
 

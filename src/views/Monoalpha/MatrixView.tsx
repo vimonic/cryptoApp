@@ -10,29 +10,42 @@ const MatrixCipher: React.FC = () => {
 
   // Funkcja tworząca macierz na podstawie tekstu i liczby kolumn
   const createMatrix = (text: string, columns: number): string[][] => {
-    const rows = Math.ceil(text.length / columns); // Oblicza liczbę wierszy
-    // Tworzy macierz, dzieląc tekst na kolumny i wypełniając puste miejsca spacjami
+    const rows = Math.ceil(text.length / columns);
     const matrix = Array.from({ length: rows }, (_, i) =>
       text.slice(i * columns, (i + 1) * columns).padEnd(columns, ' ').split('')
     );
     return matrix;
   };
 
-  // Funkcja transponująca macierz na podstawie klucza
+  // Funkcja transponująca macierz według sekwencji klucza
   const transposeMatrix = (matrix: string[][], key: number[]): string[][] => {
-    // Przestawia kolumny w macierzy według sekwencji klucza
-    return matrix[0].map((_, colIndex) => matrix.map(row => row[key[colIndex] - 1] || ' '));
+    const rows = matrix.length;
+    const columns = key.length;
+    const transposed = Array.from({ length: columns }, () => Array(rows).fill(' '));
+
+    for (let col = 0; col < columns; col++) {
+      for (let row = 0; row < rows; row++) {
+        transposed[key[col] - 1][row] = matrix[row][col] || ' ';
+      }
+    }
+    return transposed;
   };
 
   // Funkcja szyfrująca
   const handleEncrypt = () => {
-    const columns = parseInt(key, 10); 
-    const originalMatrix = createMatrix(plainText, columns); 
+    const columns = parseInt(key, 10);
+    if (isNaN(columns) || columns <= 0) {
+      alert('Klucz musi być dodatnią liczbą całkowitą.');
+      return;
+    }
+
+    const originalMatrix = createMatrix(plainText, columns);
     setMatrix(originalMatrix);
 
-    const keySequence = Array.from({ length: columns }, (_, i) => i + 1); 
-    const transposedMatrix = transposeMatrix(originalMatrix, keySequence); 
-    const encryptedText = transposedMatrix.flat().join('');  
+    const keySequence = Array.from({ length: columns }, (_, i) => i + 1);
+    const transposedMatrix = transposeMatrix(originalMatrix, keySequence);
+
+    const encryptedText = transposedMatrix.flat().join('');
     setCipherText(encryptedText);
     setAction('encrypt');
   };
@@ -40,15 +53,32 @@ const MatrixCipher: React.FC = () => {
   // Funkcja deszyfrująca
   const handleDecrypt = () => {
     const columns = parseInt(key, 10);
-    const keySequence = Array.from({ length: columns }, (_, i) => i + 1);
-    const textLength = cipherText.length; 
+    if (isNaN(columns) || columns <= 0) {
+      alert('Klucz musi być dodatnią liczbą całkowitą.');
+      return;
+    }
+
+    const textLength = cipherText.length;
     const rows = Math.ceil(textLength / columns);
 
-    const cipherMatrix = createMatrix(cipherText, rows);
-    setMatrix(cipherMatrix);
-    
+    // Przygotowanie pustej macierzy o odwróconych wymiarach
+    const cipherMatrix = Array.from({ length: columns }, () => Array(rows).fill(' '));
+    let index = 0;
+
+    // Wypełnienie macierzy zaszyfrowanym tekstem kolumnowo
+    for (let col = 0; col < columns; col++) {
+      for (let row = 0; row < rows; row++) {
+        if (index < textLength) {
+          cipherMatrix[col][row] = cipherText[index++];
+        }
+      }
+    }
+
+    // Przywrócenie oryginalnej kolejności kolumn
+    const keySequence = Array.from({ length: columns }, (_, i) => i + 1);
     const reversedMatrix = transposeMatrix(cipherMatrix, keySequence);
-    const decryptedText = reversedMatrix.flat().join('').trim(); 
+
+    const decryptedText = reversedMatrix.flat().join('').trim();
     setPlainText(decryptedText);
     setAction('decrypt');
   };
@@ -81,7 +111,7 @@ const MatrixCipher: React.FC = () => {
 
       {matrix.length > 0 && (
         <div className={styles.matrixDisplay}>
-          <h3>{action === 'encrypt' ? 'Macierz po zaszyfrowaniu' : 'Macierz po odszyfrowaniu'}</h3>
+          <h3>{action === 'encrypt' ? 'Macierz po zaszyfrowaniu' : 'Macierz po odszyfrowaniu (transpozycja)'}</h3>
           <div className={styles.matrix}>
             {matrix.map((row, rowIndex) => (
               <div key={rowIndex} className={styles.row}>

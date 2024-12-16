@@ -120,30 +120,78 @@ const DES: React.FC = () => {
   
   const decryptFile = () => {
     if (encryptedFile && key) {
-        let parsedKey = CryptoJS.enc.Utf8.parse(key);
-        parsedKey = CryptoJS.lib.WordArray.create(parsedKey.words.slice(0, 2));
-
-        let bytes: CryptoJS.lib.WordArray | undefined;
-
-        if (mode === 'ECB') {
-            bytes = CryptoJS.DES.decrypt(encryptedFile, parsedKey, {
-                mode: CryptoJS.mode.ECB,
-                padding: CryptoJS.pad.Pkcs7,
-            });
-        } else if (mode === 'CFB') {
-            const parsedIv = iv ? CryptoJS.enc.Hex.parse(iv) : undefined;
-            bytes = CryptoJS.DES.decrypt(encryptedFile, parsedKey, {
-                mode: CryptoJS.mode.CFB,
-                padding: CryptoJS.pad.Pkcs7,
-                iv: parsedIv,
-            });
+      let parsedKey = CryptoJS.enc.Utf8.parse(key);
+      parsedKey = CryptoJS.lib.WordArray.create(parsedKey.words.slice(0, 2));
+      let bytes: CryptoJS.lib.WordArray | undefined;
+  
+      if (mode === 'ECB') {
+        bytes = CryptoJS.DES.decrypt(encryptedFile, parsedKey, {
+          mode: CryptoJS.mode.ECB,
+          padding: CryptoJS.pad.Pkcs7,
+        });
+      } else if (mode === 'CFB') {
+        const parsedIv = iv ? CryptoJS.enc.Hex.parse(iv) : undefined;
+        bytes = CryptoJS.DES.decrypt(encryptedFile, parsedKey, {
+          mode: CryptoJS.mode.CFB,
+          padding: CryptoJS.pad.Pkcs7,
+          iv: parsedIv,
+        });
+      }
+  
+      if (bytes) {
+        const decryptedFileData = tryParseText(bytes);
+  
+        if (decryptedFileData.isText) {
+          setDecryptedText(decryptedFileData.text);
+        } else {
+          const base64Data = bytes.toString(CryptoJS.enc.Base64);
+          setDecryptedText(base64Data);
+  
+          const fileType = getFileType(base64Data);
+          
+          if (fileType === 'image') {
+            const img = new Image();
+            img.src = `data:image/jpeg;base64,${base64Data}`; 
+            document.body.appendChild(img);
+          } else if (fileType === 'pdf') {
+            const pdfIframe = document.createElement('iframe');
+            pdfIframe.src = `data:application/pdf;base64,${base64Data}`;
+            document.body.appendChild(pdfIframe);
+          } else {
+            // const link = document.createElement('a');
+            // link.href = `data:application/octet-stream;base64,${base64Data}`;
+            // link.download = 'decrypted-file'; // Domyślna nazwa pliku
+            // link.click();
+          }
         }
-
-        if (bytes) {
-            const decryptedFileData = bytes.toString(CryptoJS.enc.Utf8);
-            setDecryptedText(decryptedFileData || '');
-        }
+      }
     }
+  };
+  
+  
+  const tryParseText = (bytes: CryptoJS.lib.WordArray): { isText: boolean; text: string } => {
+    try {
+    
+      const text = bytes.toString(CryptoJS.enc.Utf8);
+      
+      if (text && text.trim().length > 0) {
+        return { isText: true, text };
+      }
+    } catch (e) {
+      
+    }
+    return { isText: false, text: '' };
+  };
+  
+  const getFileType = (base64Data: string): string => {
+    if (base64Data.startsWith('data:image')) {
+      return 'image';
+    }
+    if (base64Data.startsWith('data:application/pdf')) {
+      return 'pdf';
+    }
+
+    return 'binary'; 
   };
 
 
@@ -215,7 +263,7 @@ const DES: React.FC = () => {
           <textarea className={styles.textArea} value={encryptedText} readOnly />
         </div>
         <div className={styles.resultBox}>
-          <label>Odszyfrowany tekst:</label>
+          <label>Odszyfrowany tekst/plik:</label>
           <textarea className={styles.textArea} value={decryptedText} readOnly />
         </div>
       </div>
