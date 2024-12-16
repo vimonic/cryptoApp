@@ -1,0 +1,99 @@
+.matrixCipher {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #2b2b2b;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    min-width: 50%;
+}
+  
+.inputSection {
+    margin-bottom: 10px;
+    align-self:flex-start;
+}
+  
+.inputSection textarea {
+    height: 50px;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    resize: vertical;
+    margin: 10px;
+    width: 140%;
+    align-self: flex-start;
+}
+  
+.inputSection input {
+    padding: 8px;
+    width: 20%;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    align-self: center;
+    margin-left: 15px;
+}
+  
+.buttonSection button {
+    margin: 10px;
+    padding: 10px;
+    background-color: #008000;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.buttonSection button:hover {
+    background-color: #002b00;
+}
+  
+.matrixDisplay {
+    width: 100%;
+    max-width: 500px;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+  
+.matrix {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  
+.row {
+    display: flex;
+}
+  
+.cell {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    margin: 2px;
+    font-size: 18px;
+}
+  
+.result {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+}
+  
+.result textarea {
+    width: 250%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    height: 50px;
+    align-self: center;
+}
+  
