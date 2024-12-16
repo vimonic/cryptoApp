@@ -3,6 +3,7 @@ import cors from "cors";
 import https from "https";
 import { URL } from "url";
 import { TLSSocket } from "tls";
+import path from 'path';
 
 const app = express();
 
@@ -77,6 +78,14 @@ app.post("/get-certificate", (req: Request, res: Response): void => {
       console.error("Nieprawidłowy URL:", error);
       res.status(500).json({ error: "Nieprawidłowy URL" });
     }
+});
+
+// Serwowanie statycznych plików frontendowych
+app.use(express.static(path.join(__dirname, '../../build')));
+
+// Obsługa wszystkich innych ścieżek i renderowanie aplikacji React
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 
 // Uruchomienie serwera
