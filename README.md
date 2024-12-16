@@ -19,24 +19,25 @@ Aby uruchomić aplikację w kontenerze Docker, upewnij się, że masz zainstalow
 Pierwszym krokiem jest sklonowanie repozytorium aplikacji na swoje lokalne urządzenie:
 
 ```bash
-git clone https://github.com/TwojaNazwaUzytkownika/crypto-app.git
-cd crypto-app
+git clone https://github.com/vimonic/cryptoApp.git
+cd cryptoApp
 ```
 ### 2. Skonfiguruj pliki środowiskowe
 
 Upewnij się, że masz pliki konfiguracyjne (np. package.json, tsconfig.json, .env) skonfigurowane poprawnie.
 
-### 3. Zbuduj obrazy Docker
+### 3. Uruchom Docker Desktop jako administrator
+### 4. Zbuduj obrazy Docker
 
 ```bash
 docker-compose build
 ```
-### 4. Uruchom aplikację
+### 5. Uruchom aplikację
 
 ```bash
 docker-compose up
 ```
-### 5. Zatrzymanie kontenerów
+### 6. Zatrzymanie kontenerów
 
 ```bash
 docker-compose down
