@@ -21,19 +21,23 @@ Pierwszym krokiem jest sklonowanie repozytorium aplikacji na swoje lokalne urzą
 ```bash
 git clone https://github.com/TwojaNazwaUzytkownika/crypto-app.git
 cd crypto-app
-
+```
 ### 2. Skonfiguruj pliki środowiskowe
 
 Upewnij się, że masz pliki konfiguracyjne (np. package.json, tsconfig.json, .env) skonfigurowane poprawnie.
 
 ### 3. Zbuduj obrazy Docker
 
+```bash
 docker-compose build
-
+```
 ### 4. Uruchom aplikację
 
+```bash
 docker-compose up
-
+```
 ### 5. Zatrzymanie kontenerów
 
+```bash
 docker-compose down
+```
