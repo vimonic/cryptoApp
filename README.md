@@ -27,6 +27,7 @@ cd cryptoApp
 Upewnij się, że masz pliki konfiguracyjne (np. package.json, tsconfig.json, .env) skonfigurowane poprawnie.
 
 ### 3. Uruchom Docker Desktop jako administrator
+
 ### 4. Zbuduj obrazy Docker
 
 ```bash
@@ -37,6 +38,8 @@ docker-compose build
 ```bash
 docker-compose up
 ```
+### 7. W przeglądarce wchodzimy na adres http://localhost:5000/
+
 ### 6. Zatrzymanie kontenerów
 
 ```bash
