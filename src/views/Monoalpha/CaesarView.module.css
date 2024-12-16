@@ -1,0 +1,47 @@
+.caesarContainer {
+    padding: 30px;
+    width: 100vh;
+    background-color: #2b2b2b;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: auto;
+    text-align: left;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+  
+.inputGroup {
+    margin-bottom: 15px;
+    margin: 10px;
+}
+  
+input {
+    padding: 8px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+  
+.caesarContainer button {
+    background-color: #45a049;
+    transition: background-color 0.2s ease;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+  
+.caesarContainer button:hover {
+    background-color: #004203;
+}
+  
+.result {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #e8f0ff;
+    border-radius: 5px;
+    font-size: 16px;
+}
+  
